@@ -13,72 +13,26 @@ public class Team {
     @Column(nullable = false, unique = true)
     private String name;
 
-    private int played = 0;
-    private int won = 0;
-    private int drawn = 0;
-    private int lost = 0;
-    private int points = 0;
+    private String coachName;
+    private String contactEmail;
 
-    public Team() {
-    }
+    public Team() {}
 
-    public Team(String name) {
+    public Team(String name, String coachName, String contactEmail) {
         this.name = name;
+        this.coachName = coachName;
+        this.contactEmail = contactEmail;
     }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getName() {
-        return name;
-    }
+    public String getCoachName() { return coachName; }
+    public void setCoachName(String coachName) { this.coachName = coachName; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getPlayed() {
-        return played;
-    }
-
-    public void setPlayed(int played) {
-        this.played = played;
-    }
-
-    public int getWon() {
-        return won;
-    }
-
-    public void setWon(int won) {
-        this.won = won;
-    }
-
-    public int getDrawn() {
-        return drawn;
-    }
-
-    public void setDrawn(int drawn) {
-        this.drawn = drawn;
-    }
-
-    public int getLost() {
-        return lost;
-    }
-
-    public void setLost(int lost) {
-        this.lost = lost;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
+    public String getContactEmail() { return contactEmail; }
+    public void setContactEmail(String contactEmail) { this.contactEmail = contactEmail; }
 }

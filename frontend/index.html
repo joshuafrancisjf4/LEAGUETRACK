@@ -1,60 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LEAGUETRACK - Tournament Fixtures & Standings</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LeagueTrack OS — Tournament Operations</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>LEAGUETRACK</h1>
-      <p>Intramural Sports Tournament Fixtures & Standings</p>
+  <div class="ambient-glow"></div>
+  
+  <div class="shell">
+    <!-- Top Action Navigation -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-symbol">LT</div>
+        <div>
+          <h1>LeagueTrack<span class="version-tag">PRO</span></h1>
+          <p>Tournament Runtime & Table Sync Engine</p>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <a href="http://localhost:8080/swagger-ui/index.html" target="_blank" class="nav-btn swagger-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Swagger Docs
+        </a>
+        <button id="reset-btn" class="nav-btn danger-link">
+          Reset Tournament
+        </button>
+      </div>
     </header>
 
-    <!-- Team Registration -->
-    <section class="card">
-      <div class="section-header">
-        <h2>1. Register Team</h2>
-        <button id="resetAllBtn" class="btn-danger">Reset Tournament</button>
+    <!-- Quick Stat KPI Strip -->
+    <section class="kpi-strip">
+      <div class="kpi-card">
+        <span class="kpi-label">Active Roster</span>
+        <div class="kpi-val" id="teams-count">0</div>
+        <span class="kpi-sub">Registered Teams</span>
       </div>
-      <div class="form-row">
-        <input type="text" id="teamNameInput" placeholder="Enter Team Name">
-        <button id="addTeamBtn">Add Team</button>
-        <button id="generateFixturesBtn" class="btn-accent">Generate Fixtures</button>
+      <div class="kpi-card">
+        <span class="kpi-label">Fixture Matches</span>
+        <div class="kpi-val" id="matches-count">0</div>
+        <span class="kpi-sub">Round-robin sets</span>
       </div>
-      <div id="teamsList" class="badge-list"></div>
+      <div class="kpi-card primary-accent">
+        <span class="kpi-label">Automated Scheduling</span>
+        <button id="generate-btn" class="btn-sparkle">
+          ⚡ Generate Fixtures
+        </button>
+        <span class="kpi-sub">Creates round matrix</span>
+      </div>
     </section>
 
-    <!-- Fixtures Section -->
-    <section class="card">
-      <h2>2. Match Fixtures</h2>
-      <div id="fixturesContainer">
-        <p class="empty-msg">No fixtures generated yet. Add teams and click 'Generate Fixtures'.</p>
-      </div>
-    </section>
+    <!-- Operational Split -->
+    <div class="workspace-layout">
+      <!-- Left Column: Teams & Registration -->
+      <section class="tile">
+        <div class="tile-bar">
+          <div>
+            <h3>Team Roster</h3>
+            <span class="schema-badge">mysql &rsaquo; teams</span>
+          </div>
+        </div>
 
-    <!-- Standings Table -->
-    <section class="card">
-      <h2>3. Current Standings</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Team</th>
-            <th>P</th>
-            <th>W</th>
-            <th>D</th>
-            <th>L</th>
-            <th>PTS</th>
-          </tr>
-        </thead>
-        <tbody id="standingsBody">
-          <tr><td colspan="7" class="empty-msg">No standings available.</td></tr>
-        </tbody>
-      </table>
-    </section>
+        <form id="team-form" class="clean-form">
+          <input type="text" id="team-name" placeholder="Team name (required)" required />
+          <div class="dual-inputs">
+            <input type="text" id="coach-name" placeholder="Head coach" />
+            <input type="email" id="contact-email" placeholder="Official email" />
+          </div>
+          <button type="submit" class="btn-solid">+ Add Team to League</button>
+        </form>
+
+        <div class="table-wrap">
+          <table id="teams-table" class="data-grid">
+            <thead>
+              <tr>
+                <th style="width: 45px;">ID</th>
+                <th>Team</th>
+                <th>Coach</th>
+                <th style="text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Right Column: Matches & Results -->
+      <section class="tile">
+        <div class="tile-bar">
+          <div>
+            <h3>Match Center</h3>
+            <span class="schema-badge">mysql &rsaquo; fixtures, matches</span>
+          </div>
+        </div>
+
+        <div class="table-wrap" style="max-height: 480px;">
+          <table id="matches-table" class="data-grid">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Venue & Round</th>
+                <th>Clash</th>
+                <th>Status</th>
+                <th>Final Score</th>
+                <th style="text-align: right;">Submit</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Bottom Span: Dynamic Standings -->
+      <section class="tile span-all">
+        <div class="tile-bar">
+          <div>
+            <h3>Official Standings & Leaderboard</h3>
+            <span class="schema-badge">mysql &rsaquo; standings_entries</span>
+          </div>
+          <div class="scoring-legend">Win = 3pts &bull; Draw = 1pt &bull; Loss = 0pts</div>
+        </div>
+
+        <div class="table-wrap">
+          <table id="standings-table" class="data-grid standings-grid">
+            <thead>
+              <tr>
+                <th style="width: 50px;">Pos</th>
+                <th>Club Name</th>
+                <th class="num-col">Played</th>
+                <th class="num-col text-win">Won</th>
+                <th class="num-col text-draw">Drawn</th>
+                <th class="num-col text-loss">Lost</th>
+                <th class="num-col text-pts">PTS</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
   </div>
 
   <script src="script.js"></script>

@@ -1,9 +1,9 @@
 package com.example.myproject.repository;
 
-import com.example.myproject.model.Match;
+import com.example.myproject.model.Fixture;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MatchRepository extends JpaRepository<Match, Long> {
+public interface FixtureRepository extends JpaRepository<Fixture, Long> {
 }
