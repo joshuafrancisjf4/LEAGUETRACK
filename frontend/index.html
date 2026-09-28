@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEAGUETRACK - Tournament Fixtures & Standings</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>LEAGUETRACK</h1>
+      <p>Intramural Sports Tournament Fixtures & Standings</p>
+    </header>
+
+    <!-- Team Registration -->
+    <section class="card">
+      <div class="section-header">
+        <h2>1. Register Team</h2>
+        <button id="resetAllBtn" class="btn-danger">Reset Tournament</button>
+      </div>
+      <div class="form-row">
+        <input type="text" id="teamNameInput" placeholder="Enter Team Name">
+        <button id="addTeamBtn">Add Team</button>
+        <button id="generateFixturesBtn" class="btn-accent">Generate Fixtures</button>
+      </div>
+      <div id="teamsList" class="badge-list"></div>
+    </section>
+
+    <!-- Fixtures Section -->
+    <section class="card">
+      <h2>2. Match Fixtures</h2>
+      <div id="fixturesContainer">
+        <p class="empty-msg">No fixtures generated yet. Add teams and click 'Generate Fixtures'.</p>
+      </div>
+    </section>
+
+    <!-- Standings Table -->
+    <section class="card">
+      <h2>3. Current Standings</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Team</th>
+            <th>P</th>
+            <th>W</th>
+            <th>D</th>
+            <th>L</th>
+            <th>PTS</th>
+          </tr>
+        </thead>
+        <tbody id="standingsBody">
+          <tr><td colspan="7" class="empty-msg">No standings available.</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
